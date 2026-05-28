@@ -12,7 +12,7 @@
   "icon": "assets/icon.png",
   "repository": {
     "type": "git",
-    "url": "https://github.com/YOUR_USERNAME/commentfast"
+    "url": "https://github.com/PARTHPANCHAL3656/CommentFast.git"
   },
   "contributes": {
     "commands": [
