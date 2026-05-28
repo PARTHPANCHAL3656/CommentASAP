@@ -3,6 +3,7 @@ import { resolveProvider, GenerateOptions } from '../providers/aiProvider';
 import { detectLanguage } from '../scanner/workspaceScanner';
 import { replaceSelection, stripCodeFences } from '../utils/workspaceEdit';
 import { StatusBarManager } from '../utils/statusBar';
+import { showDiffAndConfirm, registerDiffProvider } from '../utils/diffPreview';
 
 export async function generateForSelection(
   context: vscode.ExtensionContext,
@@ -27,7 +28,8 @@ export async function generateForSelection(
     );
     return;
   }
-
+  
+  registerDiffProvider(context);
   const provider = await resolveProvider(context);
   if (!provider) return;
 
@@ -41,7 +43,28 @@ export async function generateForSelection(
     const result = await provider.generate(selectedText, { language, style });
     const cleaned = stripCodeFences(result);
 
-    await replaceSelection(editor, selection, cleaned);
+  if (cleaned.trim().length < selectedText.trim().length * 0.7) {
+    vscode.window.showErrorMessage(
+      'CommentFast: AI returned shorter output than input — aborting to protect your code. Try again.'
+    );
+    statusBar.updateIdle();
+    return;
+  }
+
+  const confirmed = await showDiffAndConfirm(
+    editor.document.uri,
+    selectedText,
+    cleaned,
+    'selection'
+  );
+
+  if (!confirmed) {
+    statusBar.updateIdle();
+    return;
+  }
+
+  await replaceSelection(editor, selection, cleaned);
+
     statusBar.updateDone('Selection documented');
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);

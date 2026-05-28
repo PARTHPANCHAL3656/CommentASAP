@@ -16,7 +16,7 @@ export interface GenerateOptions {
 const DEFAULT_MODELS: Record<ProviderName, string> = {
   openai: 'gpt-4o',
   anthropic: 'claude-haiku-4-5-20251001',
-  gemini: 'gemini-2.0-flash',
+  gemini: 'gemini-2.5-flash-preview-05-20',
   openrouter: 'nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free'
 };
 
@@ -49,6 +49,9 @@ function buildSystemPrompt(language: string, style: string): string {
     '3. Keep comments concise and informative — explain WHY, not WHAT when possible.',
     '4. Do not add comments to trivial single-line assignments.',
     '5. Match the indentation of the surrounding code.',
+    '5. Match the indentation of the surrounding code.',
+    '6. NEVER minify, compress, or reformat the code. Preserve all whitespace, line breaks, and indentation exactly as given.',
+    '7. If you are unsure about any part of the code, leave it exactly as is.',
   ].join('\n');
 }
 
