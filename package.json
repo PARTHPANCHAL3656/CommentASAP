@@ -3,7 +3,7 @@
   "displayName": "Commento – AI Code Documenter",
   "description": "One-click AI-powered documentation generator and comment remover for JS/TS/Python/Java/C++. Uses your own API key.",
   "version": "0.1.0",
-  "publisher": "YOUR_PUBLISHER_ID",
+  "publisher": "PARTHPANCHAL3656",
   "engines": { "vscode": "^1.85.0" },
   "categories": ["Other", "Programming Languages"],
   "keywords": ["documentation", "comments", "AI", "GPT", "Claude", "Gemini", "auto-docs"],
