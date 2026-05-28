@@ -1,0 +1,150 @@
+{
+  "name": "commento",
+  "displayName": "Commento – AI Code Documenter",
+  "description": "One-click AI-powered documentation generator and comment remover for JS/TS/Python/Java/C++. Uses your own API key.",
+  "version": "0.1.0",
+  "publisher": "YOUR_PUBLISHER_ID",
+  "engines": { "vscode": "^1.85.0" },
+  "categories": ["Other", "Programming Languages"],
+  "keywords": ["documentation", "comments", "AI", "GPT", "Claude", "Gemini", "auto-docs"],
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "icon": "assets/icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/YOUR_USERNAME/commento"
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "commento.generateForSelection",
+        "title": "Commento: Generate Comments for Selection"
+      },
+      {
+        "command": "commento.generateForFile",
+        "title": "Commento: Generate Comments for File"
+      },
+      {
+        "command": "commento.generateForProject",
+        "title": "Commento: Generate Comments for Project"
+      },
+      {
+        "command": "commento.removeComments",
+        "title": "Commento: Remove All Comments from File"
+      },
+      {
+        "command": "commento.removeCommentsProject",
+        "title": "Commento: Remove All Comments from Project"
+      },
+      {
+        "command": "commento.configureApiKey",
+        "title": "Commento: Configure API Key"
+      },
+      {
+        "command": "commento.selectProvider",
+        "title": "Commento: Select AI Provider"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "commento.generateForSelection",
+          "when": "editorHasSelection",
+          "group": "commento@1"
+        },
+        {
+          "command": "commento.generateForFile",
+          "group": "commento@2"
+        },
+        {
+          "command": "commento.removeComments",
+          "group": "commento@3"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "commento.generateForProject",
+          "group": "commento@1"
+        },
+        {
+          "command": "commento.removeCommentsProject",
+          "group": "commento@2"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Commento",
+      "properties": {
+        "commento.provider": {
+          "type": "string",
+          "default": "openai",
+          "enum": ["openai", "anthropic", "gemini", "openrouter"],
+          "enumDescriptions": [
+            "OpenAI (GPT-4o)",
+            "Anthropic (Claude Sonnet)",
+            "Google (Gemini Pro)",
+            "OpenRouter (free & paid models)"
+          ],
+          "description": "AI provider to use for documentation generation"
+        },
+        "commento.model": {
+          "type": "string",
+          "default": "",
+          "description": "Model to use. Leave blank for default. Examples: gpt-4o, gpt-4o-mini, claude-sonnet-4-20250514, gemini-1.5-pro-latest, meta-llama/llama-3.3-70b-instruct:free, nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+          "markdownDescription": "Model to use for the selected provider. Leave blank to use the default.\n\n**OpenAI:** `gpt-4o`, `gpt-4o-mini`, `gpt-3.5-turbo`\n\n**Anthropic:** `claude-sonnet-4-20250514`, `claude-haiku-4-5-20251001`\n\n**Gemini:** `gemini-1.5-pro-latest`, `gemini-1.5-flash-latest`\n\n**OpenRouter (free):** `meta-llama/llama-3.3-70b-instruct:free`, `nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free`, `mistralai/mistral-7b-instruct:free`"
+        },
+        "commento.commentStyle": {
+          "type": "string",
+          "default": "jsdoc",
+          "enum": ["jsdoc", "inline", "both"],
+          "description": "Documentation comment style: JSDoc/docstring blocks, inline comments, or both"
+        },
+        "commento.chunkSize": {
+          "type": "number",
+          "default": 80,
+          "description": "Max lines per chunk when processing large files"
+        },
+        "commento.skipPatterns": {
+          "type": "array",
+          "default": ["node_modules", "dist", ".git", "build", "__pycache__", ".next", "out", "vendor"],
+          "description": "Folder/file patterns to skip during project-wide operations"
+        },
+        "commento.showDiffPreview": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show a diff preview before applying AI-generated documentation"
+        },
+        "commento.concurrentFiles": {
+          "type": "number",
+          "default": 3,
+          "description": "Max files processed concurrently during project-wide operations"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js",
+    "package": "vsce package",
+    "publish": "vsce publish"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.0.0",
+    "typescript": "^5.3.0",
+    "@vscode/test-electron": "^2.3.0"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.20.0",
+    "@google/generative-ai": "^0.2.0",
+    "openai": "^4.20.0",
+    "web-tree-sitter": "^0.22.0"
+  }
+}
