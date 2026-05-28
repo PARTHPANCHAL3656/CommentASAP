@@ -15,8 +15,8 @@ export interface GenerateOptions {
 
 const DEFAULT_MODELS: Record<ProviderName, string> = {
   openai: 'gpt-4o',
-  anthropic: 'claude-sonnet-4-20250514',
-  gemini: 'gemini-1.5-pro-latest',
+  anthropic: 'claude-haiku-4-5-20251001',
+  gemini: 'gemini-2.0-flash',
   openrouter: 'nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free'
 };
 
@@ -128,8 +128,8 @@ export class AIProvider {
     apiKey: this.apiKey,
     baseURL: 'https://openrouter.ai/api/v1',
     defaultHeaders: {
-      'HTTP-Referer': 'https://github.com/commento-vscode',
-      'X-Title': 'Commento VS Code Extension',
+      'HTTP-Referer': 'https://github.com/commentfast-vscode',
+      'X-Title': 'CommentFast VS Code Extension',
     },
   });
   const res = await client.chat.completions.create({
@@ -153,21 +153,21 @@ export async function resolveProvider(
   context: vscode.ExtensionContext
 ): Promise<AIProvider | null> {
 
-  const config = vscode.workspace.getConfiguration('commento');
+  const config = vscode.workspace.getConfiguration('commentfast');
 
   const providerName = (config.get<string>('provider') ?? 'openai') as ProviderName;
   const modelOverride = config.get<string>('model') ?? undefined;
 
-  const apiKey = await context.secrets.get(`commento.apiKey.${providerName}`);
+  const apiKey = await context.secrets.get(`commentfast.apiKey.${providerName}`);
 
   if (!apiKey) {
     const configure = 'Configure Now';
     const choice = await vscode.window.showErrorMessage(
-      `Commento: No API key found for ${providerName}. Please configure it first.`,
+      `CommentFast: No API key found for ${providerName}. Please configure it first.`,
       configure
     );
     if (choice === configure) {
-      vscode.commands.executeCommand('Commento.configureApiKey');
+      vscode.commands.executeCommand('CommentFast.configureApiKey');
     }
     return null;
   }

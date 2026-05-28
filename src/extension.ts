@@ -9,12 +9,12 @@ import { TreeSitterService } from './processor/treeSitterService';
 import { StatusBarManager } from './utils/statusBar';
 
 export async function activate(context: vscode.ExtensionContext) {
-  console.log('[commento] Extension activating...');
+  console.log('[commentfast] Extension activating...');
 
   // Boot Tree-sitter (async, non-blocking)
   const treeSitter = TreeSitterService.getInstance();
   treeSitter.initialize().catch(err =>
-    console.warn('[commento] Tree-sitter init warning:', err)
+    console.warn('[commentfast] Tree-sitter init warning:', err)
   );
 
   const statusBar = new StatusBarManager();
@@ -23,32 +23,32 @@ export async function activate(context: vscode.ExtensionContext) {
   // ── Commands ──────────────────────────────────────────────────────────────
 
   context.subscriptions.push(
-    vscode.commands.registerCommand('commento.generateForSelection', () =>
+    vscode.commands.registerCommand('commentfast.generateForSelection', () =>
       generateForSelection(context, statusBar)
     ),
-    vscode.commands.registerCommand('commento.generateForFile', () =>
+    vscode.commands.registerCommand('commentfast.generateForFile', () =>
       generateForFile(context, statusBar)
     ),
-    vscode.commands.registerCommand('commento.generateForProject', () =>
+    vscode.commands.registerCommand('commentfast.generateForProject', () =>
       generateForProject(context, statusBar)
     ),
-    vscode.commands.registerCommand('commento.removeComments', () =>
+    vscode.commands.registerCommand('commentfast.removeComments', () =>
       removeCommentsFromFile(context, statusBar)
     ),
-    vscode.commands.registerCommand('commento.removeCommentsProject', () =>
+    vscode.commands.registerCommand('commentfast.removeCommentsProject', () =>
       removeCommentsFromProject(context, statusBar)
     ),
-    vscode.commands.registerCommand('commento.configureApiKey', () =>
+    vscode.commands.registerCommand('commentfast.configureApiKey', () =>
       configureApiKey(context)
     ),
-    vscode.commands.registerCommand('commento.selectProvider', () =>
+    vscode.commands.registerCommand('commentfast.selectProvider', () =>
       selectProvider(context)
     )
   );
 
-  console.log('[commento] Extension active.');
+  console.log('[commentfast] Extension active.');
 }
 
 export function deactivate() {
-  console.log('[commento] Deactivated.');
+  console.log('[commentfast] Deactivated.');
 }

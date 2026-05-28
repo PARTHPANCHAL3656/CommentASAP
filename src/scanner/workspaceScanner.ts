@@ -61,7 +61,7 @@ export function detectLanguageFromUri(uri: vscode.Uri): string | null {
 export async function scanWorkspace(
   rootUri?: vscode.Uri
 ): Promise<DiscoveredFile[]> {
-  const config = vscode.workspace.getConfiguration('commento');
+  const config = vscode.workspace.getConfiguration('commentfast');
   const skipPatterns: string[] = config.get('skipPatterns') ?? [];
 
   // Build a glob exclude pattern

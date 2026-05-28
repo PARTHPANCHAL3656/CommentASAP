@@ -61,16 +61,16 @@ export async function generateForProject(
   if (files.length === 0) {
     statusBar.updateIdle();
     vscode.window.showInformationMessage(
-      "commento: No supported source files found in workspace.",
+      "commentfast: No supported source files found in workspace.",
     );
     return;
   }
 
   // Confirm with user before modifying many files
   const confirm = await vscode.window.showWarningMessage(
-    `commento: About to add documentation to ${files.length} file(s). 
+    `commentfast: About to add documentation to ${files.length} file(s). 
       This will modify all supported source files. 
-      Commento: Make sure you have committed to Git first. Continue?`,
+      CommentFast: Make sure you have committed to Git first. Continue?`,
     { modal: true },
     "Yes, Document All",
     "Cancel",
@@ -81,7 +81,7 @@ export async function generateForProject(
     return;
   }
 
-  const config = vscode.workspace.getConfiguration("commento");
+  const config = vscode.workspace.getConfiguration("commentfast");
   const style = config.get<GenerateOptions["style"]>("commentStyle") ?? "jsdoc";
   const chunkSize = config.get<number>("chunkSize") ?? 80;
   const concurrency = config.get<number>("concurrentFiles") ?? 3;
@@ -93,7 +93,7 @@ export async function generateForProject(
   await vscode.window.withProgress(
     {
       location: vscode.ProgressLocation.Notification,
-      title: "commento: Documenting project",
+      title: "commentfast: Documenting project",
       cancellable: true,
     },
     async (progress, token) => {
@@ -136,13 +136,13 @@ export async function generateForProject(
   if (errors.length > 0) {
     const errList = errors.slice(0, 5).join("\n");
     vscode.window.showWarningMessage(
-      `commento: Completed with ${errors.length} error(s):\n${errList}`,
+      `commentfast: Completed with ${errors.length} error(s):\n${errList}`,
     );
     statusBar.updateError(`${errors.length} file(s) failed`);
   } else {
     statusBar.updateDone(`${completed} file(s) documented`);
     vscode.window.showInformationMessage(
-      `commento: Successfully documented ${completed} file(s).`,
+      `commentfast: Successfully documented ${completed} file(s).`,
     );
   }
 }

@@ -15,12 +15,12 @@ const PROVIDER_LABELS: Record<ProviderName, string> = {
 export async function configureApiKey(
   context: vscode.ExtensionContext
 ): Promise<void> {
-  const config = vscode.workspace.getConfiguration('commento');
+  const config = vscode.workspace.getConfiguration('commentfast');
   const currentProvider = (config.get<string>('provider') ?? 'openai') as ProviderName;
   const providerLabel = PROVIDER_LABELS[currentProvider];
 
   const apiKey = await vscode.window.showInputBox({
-    title: `commento: API Key for ${providerLabel}`,
+    title: `commentfast: API Key for ${providerLabel}`,
     prompt: `Enter your ${providerLabel} API key. It will be stored securely in VS Code's secret storage.`,
     password: true,
     ignoreFocusOut: true,
@@ -31,12 +31,12 @@ export async function configureApiKey(
   if (!apiKey) return; // User cancelled
 
   await context.secrets.store(
-    `commento.apiKey.${currentProvider}`,
+    `commentfast.apiKey.${currentProvider}`,
     apiKey.trim()
   );
 
   vscode.window.showInformationMessage(
-    `commento: API key saved for ${providerLabel}.`
+    `commentfast: API key saved for ${providerLabel}.`
   );
 }
 
@@ -56,17 +56,17 @@ export async function selectProvider(
   );
 
   const picked = await vscode.window.showQuickPick(items, {
-    title: 'commento: Select AI Provider',
-    placeHolder: 'Which AI provider should commento use?',
+    title: 'commentfast: Select AI Provider',
+    placeHolder: 'Which AI provider should commentfast use?',
   });
 
   if (!picked) return;
 
-  const config = vscode.workspace.getConfiguration('commento');
+  const config = vscode.workspace.getConfiguration('commentfast');
   await config.update('provider', picked.id, vscode.ConfigurationTarget.Global);
 
   const existingKey = await context.secrets.get(
-    `commento.apiKey.${picked.id}`
+    `commentfast.apiKey.${picked.id}`
   );
 
   if (!existingKey) {
@@ -82,7 +82,7 @@ export async function selectProvider(
     }
   } else {
     vscode.window.showInformationMessage(
-      `commento: Now using ${picked.label}.`
+      `commentfast: Now using ${picked.label}.`
     );
   }
 }

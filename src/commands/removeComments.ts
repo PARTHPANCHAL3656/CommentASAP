@@ -11,14 +11,14 @@ export async function removeCommentsFromFile(
 ): Promise<void> {
   const editor = vscode.window.activeTextEditor;
   if (!editor) {
-    vscode.window.showWarningMessage('commento: No active editor.');
+    vscode.window.showWarningMessage('commentfast: No active editor.');
     return;
   }
 
   const language = detectLanguage(editor.document);
   if (!language) {
     vscode.window.showWarningMessage(
-      `commento: Unsupported language "${editor.document.languageId}".`
+      `commentfast: Unsupported language "${editor.document.languageId}".`
     );
     return;
   }
@@ -33,7 +33,7 @@ export async function removeCommentsFromFile(
     if (confirmed) await replaceFileContent(editor.document.uri, cleaned);
     statusBar.updateIdle();
   } else {
-    vscode.window.showWarningMessage(`Commento: Comment removal not yet supported for ${language}.`);
+    vscode.window.showWarningMessage(`CommentFast: Comment removal not yet supported for ${language}.`);
   }
   return;
 }
@@ -61,7 +61,7 @@ export async function removeCommentsFromFile(
 
     if (!confirmed) {
       statusBar.updateIdle();
-      vscode.window.showInformationMessage('commento: Changes discarded.');
+      vscode.window.showInformationMessage('commentfast: Changes discarded.');
       return;
     }
 
@@ -74,7 +74,7 @@ export async function removeCommentsFromFile(
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
     statusBar.updateError(msg);
-    vscode.window.showErrorMessage(`commento Error: ${msg}`);
+    vscode.window.showErrorMessage(`commentfast Error: ${msg}`);
   }
 }
 
@@ -89,12 +89,12 @@ export async function removeCommentsFromProject(
   const supported = files.filter(f => treeSitter.isSupportedLanguage(f.language));
 
   if (supported.length === 0) {
-    vscode.window.showInformationMessage('commento: No supported files found.');
+    vscode.window.showInformationMessage('commentfast: No supported files found.');
     return;
   }
 
   const confirm = await vscode.window.showWarningMessage(
-    `commento: Remove all comments from ${supported.length} file(s)? This cannot be undone except via Git.`,
+    `commentfast: Remove all comments from ${supported.length} file(s)? This cannot be undone except via Git.`,
     { modal: true },
     'Yes, Remove All',
     'Cancel'
@@ -111,7 +111,7 @@ export async function removeCommentsFromProject(
   await vscode.window.withProgress(
     {
       location: vscode.ProgressLocation.Notification,
-      title: 'commento: Removing comments',
+      title: 'commentfast: Removing comments',
       cancellable: true,
     },
     async (progress, token) => {
@@ -144,12 +144,12 @@ export async function removeCommentsFromProject(
   if (errors.length > 0) {
     statusBar.updateError(`${errors.length} error(s)`);
     vscode.window.showWarningMessage(
-      `commento: Done with ${errors.length} error(s). First: ${errors[0]}`
+      `commentfast: Done with ${errors.length} error(s). First: ${errors[0]}`
     );
   } else {
     statusBar.updateDone(`Comments removed from ${completed} file(s)`);
     vscode.window.showInformationMessage(
-      `commento: Removed comments from ${completed} file(s).`
+      `commentfast: Removed comments from ${completed} file(s).`
     );
   }
 }

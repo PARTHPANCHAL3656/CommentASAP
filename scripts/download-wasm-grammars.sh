@@ -24,7 +24,7 @@ declare -A GRAMMARS=(
   ["c"]="tree-sitter-c.wasm"
 )
 
-echo "[commento] Downloading Tree-sitter WASM grammars..."
+echo "[commentfast] Downloading Tree-sitter WASM grammars..."
 
 for LANG in "${!GRAMMARS[@]}"; do
   FILE="${GRAMMARS[$LANG]}"
@@ -44,4 +44,4 @@ for LANG in "${!GRAMMARS[@]}"; do
   echo "  [warn] Could not build $FILE. Install tree-sitter-${LANG} and run: npx tree-sitter build-wasm node_modules/tree-sitter-${LANG}"
 done
 
-echo "[commento] WASM setup complete. Files in ./wasm/"
+echo "[commentfast] WASM setup complete. Files in ./wasm/"

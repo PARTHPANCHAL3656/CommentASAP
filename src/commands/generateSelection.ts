@@ -10,20 +10,20 @@ export async function generateForSelection(
 ): Promise<void> {
   const editor = vscode.window.activeTextEditor;
   if (!editor) {
-    vscode.window.showWarningMessage('commento: No active editor.');
+    vscode.window.showWarningMessage('commentfast: No active editor.');
     return;
   }
 
   const selection = editor.selection;
   if (selection.isEmpty) {
-    vscode.window.showWarningMessage('commento: No text selected. Select code first.');
+    vscode.window.showWarningMessage('commentfast: No text selected. Select code first.');
     return;
   }
 
   const language = detectLanguage(editor.document);
   if (!language) {
     vscode.window.showWarningMessage(
-      `commento: Unsupported language "${editor.document.languageId}".`
+      `commentfast: Unsupported language "${editor.document.languageId}".`
     );
     return;
   }
@@ -32,7 +32,7 @@ export async function generateForSelection(
   if (!provider) return;
 
   const selectedText = editor.document.getText(selection);
-  const config = vscode.workspace.getConfiguration('commento');
+  const config = vscode.workspace.getConfiguration('commentfast');
   const style = config.get<GenerateOptions['style']>('commentStyle') ?? 'jsdoc';
 
   statusBar.updateWorking('Documenting selection...');
@@ -46,6 +46,6 @@ export async function generateForSelection(
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
     statusBar.updateError(msg);
-    vscode.window.showErrorMessage(`commento Error: ${msg}`);
+    vscode.window.showErrorMessage(`commentfast Error: ${msg}`);
   }
 }
