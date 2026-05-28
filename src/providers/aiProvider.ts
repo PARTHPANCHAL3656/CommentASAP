@@ -1,58 +1,58 @@
-import * as vscode from 'vscode';
-import OpenAI from 'openai';
-import Anthropic from '@anthropic-ai/sdk';
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import * as vscode from "vscode";
+import OpenAI from "openai";
+import Anthropic from "@anthropic-ai/sdk";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
-export type ProviderName = 'openai' | 'anthropic' | 'gemini' | 'openrouter';
+export type ProviderName = "openai" | "anthropic" | "gemini" | "openrouter";
 
 export interface GenerateOptions {
   language: string;
-  style: 'jsdoc' | 'inline' | 'both';
+  style: "jsdoc" | "inline" | "both";
   model?: string;
 }
 
 // ── Default models per provider ──────────────────────────────────────────────
 
 const DEFAULT_MODELS: Record<ProviderName, string> = {
-  openai: 'gpt-4o',
-  anthropic: 'claude-haiku-4-5-20251001',
-  gemini: 'gemini-2.5-flash-preview-05-20',
-  openrouter: 'nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free'
+  openai: "gpt-4o",
+  anthropic: "claude-haiku-4-5-20251001",
+  gemini: "gemini-2.5-flash-preview-05-20",
+  openrouter: "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
 };
 
 // ── Language-aware prompt builder ────────────────────────────────────────────
 
 function buildSystemPrompt(language: string, style: string): string {
   const styleGuide =
-    style === 'jsdoc'
-      ? 'Use JSDoc/docstring-style block comments before each function/class/method.'
-      : style === 'inline'
-      ? 'Add concise inline comments on complex logic lines only. Do NOT over-comment obvious lines.'
-      : 'Use JSDoc/docstring-style block comments for functions/classes AND inline comments for complex logic.';
+    style === "jsdoc"
+      ? "Use JSDoc/docstring-style block comments before each function/class/method."
+      : style === "inline"
+        ? "Add concise inline comments on complex logic lines only. Do NOT over-comment obvious lines."
+        : "Use JSDoc/docstring-style block comments for functions/classes AND inline comments for complex logic.";
 
   const langNote: Record<string, string> = {
-    javascript: 'Use /** JSDoc */ for functions/classes.',
-    typescript: 'Use /** TSDoc */ for functions/classes and interfaces.',
-    python: 'Use Google-style or NumPy-style docstrings for functions/classes.',
-    java: 'Use Javadoc /** */ for classes and public methods.',
-    cpp: 'Use Doxygen /** */ style for functions and classes.',
-    c: 'Use Doxygen /** */ style.',
+    javascript: "Use /** JSDoc */ for functions/classes.",
+    typescript: "Use /** TSDoc */ for functions/classes and interfaces.",
+    python: "Use Google-style or NumPy-style docstrings for functions/classes.",
+    java: "Use Javadoc /** */ for classes and public methods.",
+    cpp: "Use Doxygen /** */ style for functions and classes.",
+    c: "Use Doxygen /** */ style.",
   };
 
   return [
     `You are a senior software engineer writing production-quality documentation for ${language} code.`,
     styleGuide,
-    langNote[language] ?? `Follow standard ${language} documentation conventions.`,
-    'RULES:',
-    '1. Return ONLY the original code with comments added. No markdown, no explanations, no code fences.',
-    '2. Preserve ALL original code exactly — only add comments, never modify or remove code.',
-    '3. Keep comments concise and informative — explain WHY, not WHAT when possible.',
-    '4. Do not add comments to trivial single-line assignments.',
-    '5. Match the indentation of the surrounding code.',
-    '5. Match the indentation of the surrounding code.',
-    '6. NEVER minify, compress, or reformat the code. Preserve all whitespace, line breaks, and indentation exactly as given.',
-    '7. If you are unsure about any part of the code, leave it exactly as is.',
-  ].join('\n');
+    langNote[language] ??
+      `Follow standard ${language} documentation conventions.`,
+    "RULES:",
+    "1. Return ONLY the original code with comments added. No markdown, no explanations, no code fences.",
+    "2. Preserve ALL original code EXACTLY — every line, every character, every blank line, every indentation. Do NOT remove, move, reorder, or modify any code.",
+    "3. Do NOT minify, compress, or reformat. Output must have the same number of code lines as input, just with comment lines added.",
+    "4. Keep comments concise — explain WHY, not WHAT.",
+    "5. Do not comment trivial or obvious lines.",
+    "6. If the input is 50 lines, the output must be at least 50 lines. Never output less code than you received.",
+    "7. If you are uncertain about any part, copy it exactly as-is. When in doubt, preserve.",
+  ].join("\n");
 }
 
 function buildUserPrompt(code: string, language: string): string {
@@ -81,13 +81,13 @@ export class AIProvider {
     const userPrompt = buildUserPrompt(code, opts.language);
 
     switch (this.name) {
-      case 'openai':
+      case "openai":
         return this.callOpenAI(systemPrompt, userPrompt);
-      case 'anthropic':
+      case "anthropic":
         return this.callAnthropic(systemPrompt, userPrompt);
-      case 'gemini':
+      case "gemini":
         return this.callGemini(systemPrompt, userPrompt);
-      case 'openrouter':
+      case "openrouter":
         return this.callOpenRouter(systemPrompt, userPrompt);
     }
   }
@@ -97,13 +97,13 @@ export class AIProvider {
     const res = await client.chat.completions.create({
       model: this.model,
       messages: [
-        { role: 'system', content: system },
-        { role: 'user', content: user },
+        { role: "system", content: system },
+        { role: "user", content: user },
       ],
       temperature: 0.2,
       max_tokens: 4096,
     });
-    return res.choices[0]?.message?.content?.trim() ?? '';
+    return res.choices[0]?.message?.content?.trim() ?? "";
   }
 
   private async callAnthropic(system: string, user: string): Promise<string> {
@@ -111,12 +111,12 @@ export class AIProvider {
     const res = await client.messages.create({
       model: this.model,
       system,
-      messages: [{ role: 'user', content: user }],
+      messages: [{ role: "user", content: user }],
       temperature: 0.2,
       max_tokens: 4096,
     });
     const block = res.content[0];
-    return block.type === 'text' ? block.text.trim() : '';
+    return block.type === "text" ? block.text.trim() : "";
   }
 
   private async callGemini(system: string, user: string): Promise<string> {
@@ -127,50 +127,50 @@ export class AIProvider {
   }
 
   private async callOpenRouter(system: string, user: string): Promise<string> {
-  const client = new OpenAI({
-    apiKey: this.apiKey,
-    baseURL: 'https://openrouter.ai/api/v1',
-    defaultHeaders: {
-      'HTTP-Referer': 'https://github.com/commentfast-vscode',
-      'X-Title': 'CommentFast VS Code Extension',
-    },
-  });
-  const res = await client.chat.completions.create({
-    model: this.model,
-    messages: [
-      { role: 'system', content: system },
-      { role: 'user', content: user },
-    ],
-    temperature: 0.2,
-    max_tokens: 4096,
-  });
-  return res.choices[0]?.message?.content?.trim() ?? '';
+    const client = new OpenAI({
+      apiKey: this.apiKey,
+      baseURL: "https://openrouter.ai/api/v1",
+      defaultHeaders: {
+        "HTTP-Referer": "https://github.com/commentfast-vscode",
+        "X-Title": "CommentFast VS Code Extension",
+      },
+    });
+    const res = await client.chat.completions.create({
+      model: this.model,
+      messages: [
+        { role: "system", content: system },
+        { role: "user", content: user },
+      ],
+      temperature: 0.2,
+      max_tokens: 4096,
+    });
+    return res.choices[0]?.message?.content?.trim() ?? "";
+  }
 }
-
-}
-  
 
 // ── Resolve active provider from VS Code config + SecretStorage ───────────────
 
 export async function resolveProvider(
-  context: vscode.ExtensionContext
+  context: vscode.ExtensionContext,
 ): Promise<AIProvider | null> {
+  const config = vscode.workspace.getConfiguration("commentfast");
 
-  const config = vscode.workspace.getConfiguration('commentfast');
+  const providerName = (config.get<string>("provider") ??
+    "openai") as ProviderName;
+  const modelOverride = config.get<string>("model") ?? undefined;
 
-  const providerName = (config.get<string>('provider') ?? 'openai') as ProviderName;
-  const modelOverride = config.get<string>('model') ?? undefined;
-
-  const apiKey = await context.secrets.get(`commentfast.apiKey.${providerName}`);
+  const apiKey = await context.secrets.get(
+    `commentfast.apiKey.${providerName}`,
+  );
 
   if (!apiKey) {
-    const configure = 'Configure Now';
+    const configure = "Configure Now";
     const choice = await vscode.window.showErrorMessage(
       `CommentFast: No API key found for ${providerName}. Please configure it first.`,
-      configure
+      configure,
     );
     if (choice === configure) {
-      vscode.commands.executeCommand('CommentFast.configureApiKey');
+      vscode.commands.executeCommand("CommentFast.configureApiKey");
     }
     return null;
   }
