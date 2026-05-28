@@ -131,8 +131,8 @@ export class AIProvider {
       apiKey: this.apiKey,
       baseURL: "https://openrouter.ai/api/v1",
       defaultHeaders: {
-        "HTTP-Referer": "https://github.com/commentfast-vscode",
-        "X-Title": "CommentFast VS Code Extension",
+        "HTTP-Referer": "https://github.com/commentasap-vscode",
+        "X-Title": "CommentASAP VS Code Extension",
       },
     });
     const res = await client.chat.completions.create({
@@ -153,24 +153,24 @@ export class AIProvider {
 export async function resolveProvider(
   context: vscode.ExtensionContext,
 ): Promise<AIProvider | null> {
-  const config = vscode.workspace.getConfiguration("commentfast");
+  const config = vscode.workspace.getConfiguration("commentasap");
 
   const providerName = (config.get<string>("provider") ??
     "openai") as ProviderName;
   const modelOverride = config.get<string>("model") ?? undefined;
 
   const apiKey = await context.secrets.get(
-    `commentfast.apiKey.${providerName}`,
+    `commentasap.apiKey.${providerName}`,
   );
 
   if (!apiKey) {
     const configure = "Configure Now";
     const choice = await vscode.window.showErrorMessage(
-      `CommentFast: No API key found for ${providerName}. Please configure it first.`,
+      `CommentASAP: No API key found for ${providerName}. Please configure it first.`,
       configure,
     );
     if (choice === configure) {
-      vscode.commands.executeCommand("CommentFast.configureApiKey");
+      vscode.commands.executeCommand("CommentASAP.configureApiKey");
     }
     return null;
   }

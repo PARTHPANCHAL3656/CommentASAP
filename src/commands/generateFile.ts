@@ -12,14 +12,14 @@ export async function generateForFile(
 ): Promise<void> {
   const editor = vscode.window.activeTextEditor;
   if (!editor) {
-    vscode.window.showWarningMessage("commentfast: No active editor.");
+    vscode.window.showWarningMessage("commentasap: No active editor.");
     return;
   }
 
   const language = detectLanguage(editor.document);
   if (!language) {
     vscode.window.showWarningMessage(
-      `commentfast: Unsupported language "${editor.document.languageId}".`,
+      `commentasap: Unsupported language "${editor.document.languageId}".`,
     );
     return;
   }
@@ -31,7 +31,7 @@ export async function generateForFile(
   registerDiffProvider(context);
 
   const source = editor.document.getText();
-  const config = vscode.workspace.getConfiguration("commentfast");
+  const config = vscode.workspace.getConfiguration("commentasap");
   const style = config.get<GenerateOptions["style"]>("commentStyle") ?? "jsdoc";
   const chunkSize = config.get<number>("chunkSize") ?? 80;
 
@@ -57,7 +57,7 @@ export async function generateForFile(
 
     if (cleaned.trim().length < source.trim().length * 0.5) {
       vscode.window.showErrorMessage(
-        "CommentFast: AI returned suspiciously short output. Aborting to protect your file.",
+        "CommentASAP: AI returned suspiciously short output. Aborting to protect your file.",
       );
       statusBar.updateIdle();
       return;
@@ -73,7 +73,7 @@ export async function generateForFile(
 
     if (!confirmed) {
       statusBar.updateIdle();
-      vscode.window.showInformationMessage("commentfast: Changes discarded.");
+      vscode.window.showInformationMessage("commentasap: Changes discarded.");
       return;
     }
 
@@ -86,6 +86,6 @@ export async function generateForFile(
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
     statusBar.updateError(msg);
-    vscode.window.showErrorMessage(`commentfast Error: ${msg}`);
+    vscode.window.showErrorMessage(`commentasap Error: ${msg}`);
   }
 }

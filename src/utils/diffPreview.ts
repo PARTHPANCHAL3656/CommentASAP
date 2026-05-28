@@ -9,11 +9,11 @@
 import * as vscode from 'vscode';
 
 // Virtual document content provider for diff view
-const SCHEME = 'commentfast-diff';
+const SCHEME = 'commentasap-diff';
 
 const contentMap = new Map<string, string>();
 
-class commentfastContentProvider implements vscode.TextDocumentContentProvider {
+class commentasapContentProvider implements vscode.TextDocumentContentProvider {
   private _onDidChange = new vscode.EventEmitter<vscode.Uri>();
   readonly onDidChange = this._onDidChange.event;
 
@@ -27,10 +27,10 @@ class commentfastContentProvider implements vscode.TextDocumentContentProvider {
   }
 }
 
-let _provider: commentfastContentProvider | undefined;
+let _provider: commentasapContentProvider | undefined;
 
 export function registerDiffProvider(context: vscode.ExtensionContext): void {
-  _provider = new commentfastContentProvider();
+  _provider = new commentasapContentProvider();
   context.subscriptions.push(
     vscode.workspace.registerTextDocumentContentProvider(SCHEME, _provider)
   );
@@ -48,7 +48,7 @@ export async function showDiffAndConfirm(
   documented: string,
   label: string
 ): Promise<boolean> {
-  const config = vscode.workspace.getConfiguration('commentfast');
+  const config = vscode.workspace.getConfiguration('commentasap');
   const showDiff = config.get<boolean>('showDiffPreview', true);
 
   if (!showDiff) return true;
@@ -74,7 +74,7 @@ export async function showDiffAndConfirm(
     'vscode.diff',
     originalUri,
     documentedUri,
-    `commentfast: ${label} ← Before | After →`,
+    `commentasap: ${label} ← Before | After →`,
     { preview: true }
   );
 
@@ -82,7 +82,7 @@ export async function showDiffAndConfirm(
   const discard = 'Discard';
 
   const choice = await vscode.window.showInformationMessage(
-    `commentfast: Review changes for ${label}. Apply?`,
+    `commentasap: Review changes for ${label}. Apply?`,
     { modal: true },
     apply,
     discard

@@ -1,6 +1,6 @@
 {
-  "name": "commentfast",
-  "displayName": "CommentFast – AI Code Documenter",
+  "name": "commentasap",
+  "displayName": "CommentASAP – AI Code Documenter",
   "description": "One-click AI-powered documentation generator and comment remover for JS/TS/Python/Java/C++. Uses your own API key.",
   "version": "0.1.0",
   "publisher": "PARTHPANCHAL3656",
@@ -12,70 +12,70 @@
   "icon": "assets/icon.png",
   "repository": {
     "type": "git",
-    "url": "https://github.com/PARTHPANCHAL3656/CommentFast.git"
+    "url": "https://github.com/PARTHPANCHAL3656/CommentASAP.git"
   },
   "contributes": {
     "commands": [
       {
-        "command": "commentfast.generateForSelection",
-        "title": "CommentFast: Generate Comments for Selection"
+        "command": "commentasap.generateForSelection",
+        "title": "CommentASAP: Generate Comments for Selection"
       },
       {
-        "command": "commentfast.generateForFile",
-        "title": "CommentFast: Generate Comments for File"
+        "command": "commentasap.generateForFile",
+        "title": "CommentASAP: Generate Comments for File"
       },
       {
-        "command": "commentfast.generateForProject",
-        "title": "CommentFast: Generate Comments for Project"
+        "command": "commentasap.generateForProject",
+        "title": "CommentASAP: Generate Comments for Project"
       },
       {
-        "command": "commentfast.removeComments",
-        "title": "CommentFast: Remove All Comments from File"
+        "command": "commentasap.removeComments",
+        "title": "CommentASAP: Remove All Comments from File"
       },
       {
-        "command": "commentfast.removeCommentsProject",
-        "title": "CommentFast: Remove All Comments from Project"
+        "command": "commentasap.removeCommentsProject",
+        "title": "CommentASAP: Remove All Comments from Project"
       },
       {
-        "command": "commentfast.configureApiKey",
-        "title": "CommentFast: Configure API Key"
+        "command": "commentasap.configureApiKey",
+        "title": "CommentASAP: Configure API Key"
       },
       {
-        "command": "commentfast.selectProvider",
-        "title": "CommentFast: Select AI Provider"
+        "command": "commentasap.selectProvider",
+        "title": "CommentASAP: Select AI Provider"
       }
     ],
     "menus": {
       "editor/context": [
         {
-          "command": "commentfast.generateForSelection",
+          "command": "commentasap.generateForSelection",
           "when": "editorHasSelection",
-          "group": "commentfast@1"
+          "group": "commentasap@1"
         },
         {
-          "command": "commentfast.generateForFile",
-          "group": "commentfast@2"
+          "command": "commentasap.generateForFile",
+          "group": "commentasap@2"
         },
         {
-          "command": "commentfast.removeComments",
-          "group": "commentfast@3"
+          "command": "commentasap.removeComments",
+          "group": "commentasap@3"
         }
       ],
       "explorer/context": [
         {
-          "command": "commentfast.generateForProject",
-          "group": "commentfast@1"
+          "command": "commentasap.generateForProject",
+          "group": "commentasap@1"
         },
         {
-          "command": "commentfast.removeCommentsProject",
-          "group": "commentfast@2"
+          "command": "commentasap.removeCommentsProject",
+          "group": "commentasap@2"
         }
       ]
     },
     "configuration": {
-      "title": "CommentFast",
+      "title": "CommentASAP",
       "properties": {
-        "commentfast.provider": {
+        "commentasap.provider": {
           "type": "string",
           "default": "openai",
           "enum": ["openai", "anthropic", "gemini", "openrouter"],
@@ -87,34 +87,34 @@
           ],
           "description": "AI provider to use for documentation generation"
         },
-        "commentfast.model": {
+        "commentasap.model": {
           "type": "string",
           "default": "",
           "description": "Model to use. Leave blank for default. Examples: gpt-4o, gpt-4o-mini, claude-sonnet-4-20250514, gemini-1.5-pro-latest, meta-llama/llama-3.3-70b-instruct:free, nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
           "markdownDescription": "Model to use for the selected provider. Leave blank to use the default.\n\n**OpenAI:** `gpt-4o`, `gpt-4o-mini`, `gpt-3.5-turbo`\n\n**Anthropic:** `claude-sonnet-4-20250514`, `claude-haiku-4-5-20251001`\n\n**Gemini:** `gemini-1.5-pro-latest`, `gemini-1.5-flash-latest`\n\n**OpenRouter (free):** `meta-llama/llama-3.3-70b-instruct:free`, `nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free`, `mistralai/mistral-7b-instruct:free`"
         },
-        "commentfast.commentStyle": {
+        "commentasap.commentStyle": {
           "type": "string",
           "default": "jsdoc",
           "enum": ["jsdoc", "inline", "both"],
           "description": "Documentation comment style: JSDoc/docstring blocks, inline comments, or both"
         },
-        "commentfast.chunkSize": {
+        "commentasap.chunkSize": {
           "type": "number",
           "default": 80,
           "description": "Max lines per chunk when processing large files"
         },
-        "commentfast.skipPatterns": {
+        "commentasap.skipPatterns": {
           "type": "array",
           "default": ["node_modules", "dist", ".git", "build", "__pycache__", ".next", "out", "vendor"],
           "description": "Folder/file patterns to skip during project-wide operations"
         },
-        "commentfast.showDiffPreview": {
+        "commentasap.showDiffPreview": {
           "type": "boolean",
           "default": true,
           "description": "Show a diff preview before applying AI-generated documentation"
         },
-        "commentfast.concurrentFiles": {
+        "commentasap.concurrentFiles": {
           "type": "number",
           "default": 3,
           "description": "Max files processed concurrently during project-wide operations"

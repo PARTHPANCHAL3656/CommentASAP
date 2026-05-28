@@ -1,7 +1,7 @@
-# commentfast — AI Code Documenter
+# commentasap — AI Code Documenter
 
 > One-click AI-powered documentation generator and comment remover for VS Code.
-> Uses **your own API key** — no data is sent to commentfast servers.
+> Uses **your own API key** — no data is sent to commentasap servers.
 
 ![VS Code](https://img.shields.io/badge/VS%20Code-^1.85.0-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
@@ -33,19 +33,19 @@ JavaScript · TypeScript · Python · Java · C/C++
 
 ### 1. Install the extension
 
-Search for **commentfast** in the VS Code Marketplace, or install from VSIX:
+Search for **commentasap** in the VS Code Marketplace, or install from VSIX:
 
 ```bash
-code --install-extension commentfast-0.1.0.vsix
+code --install-extension commentasap-0.1.0.vsix
 ```
 
 ### 2. Select your AI provider
 
-Open the Command Palette (`Ctrl+Shift+P` / `Cmd+Shift+P`) → `commentfast: Select AI Provider`
+Open the Command Palette (`Ctrl+Shift+P` / `Cmd+Shift+P`) → `commentasap: Select AI Provider`
 
 ### 3. Add your API key
 
-`Ctrl+Shift+P` → `commentfast: Configure API Key`
+`Ctrl+Shift+P` → `commentasap: Configure API Key`
 
 Your key is stored using VS Code's encrypted [SecretStorage](https://code.visualstudio.com/api/references/vscode-api#SecretStorage) — never written to disk in plaintext.
 
@@ -57,34 +57,34 @@ Your key is stored using VS Code's encrypted [SecretStorage](https://code.visual
 
 | Command | What it does |
 |---|---|
-| `commentfast: Generate Comments for Selection` | Document selected code |
-| `commentfast: Generate Comments for File` | Document the full active file |
-| `commentfast: Generate Comments for Project` | Document all project files |
-| `commentfast: Remove All Comments from File` | Strip all comments (AST-safe) |
-| `commentfast: Remove All Comments from Project` | Strip comments project-wide |
-| `commentfast: Configure API Key` | Store/update your API key |
-| `commentfast: Select AI Provider` | Switch between OpenAI/Anthropic/Gemini |
+| `commentasap: Generate Comments for Selection` | Document selected code |
+| `commentasap: Generate Comments for File` | Document the full active file |
+| `commentasap: Generate Comments for Project` | Document all project files |
+| `commentasap: Remove All Comments from File` | Strip all comments (AST-safe) |
+| `commentasap: Remove All Comments from Project` | Strip comments project-wide |
+| `commentasap: Configure API Key` | Store/update your API key |
+| `commentasap: Select AI Provider` | Switch between OpenAI/Anthropic/Gemini |
 
 ### Via Right-Click Menu
 
-Right-click in the editor → commentfast submenu for selection and file-level operations.
-Right-click in the Explorer → commentfast submenu for project-level operations.
+Right-click in the editor → commentasap submenu for selection and file-level operations.
+Right-click in the Explorer → commentasap submenu for project-level operations.
 
 ---
 
 ## Configuration
 
-All settings available under `File → Preferences → Settings → commentfast`:
+All settings available under `File → Preferences → Settings → commentasap`:
 
 | Setting | Default | Description |
 |---|---|---|
-| `commentfast.provider` | `openai` | AI provider (`openai` / `anthropic` / `gemini`) |
-| `commentfast.model` | *(blank)* | Override default model |
-| `commentfast.commentStyle` | `jsdoc` | `jsdoc`, `inline`, or `both` |
-| `commentfast.chunkSize` | `80` | Max lines per AI chunk |
-| `commentfast.skipPatterns` | `[node_modules, dist, ...]` | Folders to skip during project scan |
-| `commentfast.showDiffPreview` | `true` | Show diff before applying changes |
-| `commentfast.concurrentFiles` | `3` | Files processed concurrently |
+| `commentasap.provider` | `openai` | AI provider (`openai` / `anthropic` / `gemini`) |
+| `commentasap.model` | *(blank)* | Override default model |
+| `commentasap.commentStyle` | `jsdoc` | `jsdoc`, `inline`, or `both` |
+| `commentasap.chunkSize` | `80` | Max lines per AI chunk |
+| `commentasap.skipPatterns` | `[node_modules, dist, ...]` | Folders to skip during project scan |
+| `commentasap.showDiffPreview` | `true` | Show diff before applying changes |
+| `commentasap.concurrentFiles` | `3` | Files processed concurrently |
 
 ---
 
@@ -165,8 +165,8 @@ vsce publish major   # 0.1.0 → 1.0.0
 ## Development
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/commentfast
-cd commentfast
+git clone https://github.com/YOUR_USERNAME/commentasap
+cd commentasap
 npm install
 
 # Compile in watch mode
@@ -181,7 +181,7 @@ npm run watch
 
 - API keys are stored **only** in VS Code's local encrypted SecretStorage.
 - Your code is sent **only** to the AI provider you select, under your account.
-- commentfast has no backend, no telemetry, and no accounts.
+- commentasap has no backend, no telemetry, and no accounts.
 
 ---
 

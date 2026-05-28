@@ -11,20 +11,20 @@ export async function generateForSelection(
 ): Promise<void> {
   const editor = vscode.window.activeTextEditor;
   if (!editor) {
-    vscode.window.showWarningMessage('commentfast: No active editor.');
+    vscode.window.showWarningMessage('commentasap: No active editor.');
     return;
   }
 
   const selection = editor.selection;
   if (selection.isEmpty) {
-    vscode.window.showWarningMessage('commentfast: No text selected. Select code first.');
+    vscode.window.showWarningMessage('commentasap: No text selected. Select code first.');
     return;
   }
 
   const language = detectLanguage(editor.document);
   if (!language) {
     vscode.window.showWarningMessage(
-      `commentfast: Unsupported language "${editor.document.languageId}".`
+      `commentasap: Unsupported language "${editor.document.languageId}".`
     );
     return;
   }
@@ -34,7 +34,7 @@ export async function generateForSelection(
   if (!provider) return;
 
   const selectedText = editor.document.getText(selection);
-  const config = vscode.workspace.getConfiguration('commentfast');
+  const config = vscode.workspace.getConfiguration('commentasap');
   const style = config.get<GenerateOptions['style']>('commentStyle') ?? 'jsdoc';
 
   statusBar.updateWorking('Documenting selection...');
@@ -45,7 +45,7 @@ export async function generateForSelection(
 
   if (cleaned.trim().length < selectedText.trim().length * 0.7) {
     vscode.window.showErrorMessage(
-      'CommentFast: AI returned shorter output than input — aborting to protect your code. Try again.'
+      'CommentASAP: AI returned shorter output than input — aborting to protect your code. Try again.'
     );
     statusBar.updateIdle();
     return;
@@ -69,6 +69,6 @@ export async function generateForSelection(
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
     statusBar.updateError(msg);
-    vscode.window.showErrorMessage(`commentfast Error: ${msg}`);
+    vscode.window.showErrorMessage(`commentasap Error: ${msg}`);
   }
 }

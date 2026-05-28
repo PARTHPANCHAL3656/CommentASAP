@@ -15,12 +15,12 @@ const PROVIDER_LABELS: Record<ProviderName, string> = {
 export async function configureApiKey(
   context: vscode.ExtensionContext
 ): Promise<void> {
-  const config = vscode.workspace.getConfiguration('commentfast');
+  const config = vscode.workspace.getConfiguration('commentasap');
   const currentProvider = (config.get<string>('provider') ?? 'openai') as ProviderName;
   const providerLabel = PROVIDER_LABELS[currentProvider];
 
   const apiKey = await vscode.window.showInputBox({
-    title: `commentfast: API Key for ${providerLabel}`,
+    title: `commentasap: API Key for ${providerLabel}`,
     prompt: `Enter your ${providerLabel} API key. It will be stored securely in VS Code's secret storage.`,
     password: true,
     ignoreFocusOut: true,
@@ -31,12 +31,12 @@ export async function configureApiKey(
   if (!apiKey) return; // User cancelled
 
   await context.secrets.store(
-    `commentfast.apiKey.${currentProvider}`,
+    `commentasap.apiKey.${currentProvider}`,
     apiKey.trim()
   );
 
   vscode.window.showInformationMessage(
-    `commentfast: API key saved for ${providerLabel}.`
+    `commentasap: API key saved for ${providerLabel}.`
   );
 }
 
@@ -56,17 +56,17 @@ export async function selectProvider(
   );
 
   const picked = await vscode.window.showQuickPick(items, {
-    title: 'commentfast: Select AI Provider',
-    placeHolder: 'Which AI provider should commentfast use?',
+    title: 'commentasap: Select AI Provider',
+    placeHolder: 'Which AI provider should commentasap use?',
   });
 
   if (!picked) return;
 
-  const config = vscode.workspace.getConfiguration('commentfast');
+  const config = vscode.workspace.getConfiguration('commentasap');
   await config.update('provider', picked.id, vscode.ConfigurationTarget.Global);
 
   const existingKey = await context.secrets.get(
-    `commentfast.apiKey.${picked.id}`
+    `commentasap.apiKey.${picked.id}`
   );
 
   if (!existingKey) {
@@ -82,7 +82,7 @@ export async function selectProvider(
     }
   } else {
     vscode.window.showInformationMessage(
-      `commentfast: Now using ${picked.label}.`
+      `commentasap: Now using ${picked.label}.`
     );
   }
 }
