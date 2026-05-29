@@ -11,16 +11,12 @@ export interface GenerateOptions {
   model?: string;
 }
 
-// ── Default models per provider ──────────────────────────────────────────────
-
 const DEFAULT_MODELS: Record<ProviderName, string> = {
   openai: "gpt-4o",
   anthropic: "claude-haiku-4-5-20251001",
   gemini: "gemini-2.5-flash-preview-05-20",
   openrouter: "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
 };
-
-// ── Language-aware prompt builder ────────────────────────────────────────────
 
 function buildSystemPrompt(language: string, style: string): string {
   const styleGuide =
@@ -42,8 +38,7 @@ function buildSystemPrompt(language: string, style: string): string {
   return [
     `You are a senior software engineer writing production-quality documentation for ${language} code.`,
     styleGuide,
-    langNote[language] ??
-      `Follow standard ${language} documentation conventions.`,
+    langNote[language] ?? `Follow standard ${language} documentation conventions.`,
     "RULES:",
     "1. Return ONLY the original code with comments added. No markdown, no explanations, no code fences.",
     "2. Preserve ALL original code EXACTLY — every line, every character, every blank line, every indentation. Do NOT remove, move, reorder, or modify any code.",
@@ -59,7 +54,6 @@ function buildUserPrompt(code: string, language: string): string {
   return `Add documentation comments to the following ${language} code:\n\n${code}`;
 }
 
-// ── Provider factory ──────────────────────────────────────────────────────────
 
 export class AIProvider {
   private name: ProviderName;
@@ -148,20 +142,14 @@ export class AIProvider {
   }
 }
 
-// ── Resolve active provider from VS Code config + SecretStorage ───────────────
-
 export async function resolveProvider(
   context: vscode.ExtensionContext,
 ): Promise<AIProvider | null> {
   const config = vscode.workspace.getConfiguration("commentasap");
-
-  const providerName = (config.get<string>("provider") ??
-    "openai") as ProviderName;
+  const providerName = (config.get<string>("provider") ?? "openai") as ProviderName;
   const modelOverride = config.get<string>("model") ?? undefined;
 
-  const apiKey = await context.secrets.get(
-    `commentasap.apiKey.${providerName}`,
-  );
+  const apiKey = await context.secrets.get(`commentasap.apiKey.${providerName}`);
 
   if (!apiKey) {
     const configure = "Configure Now";
@@ -170,7 +158,8 @@ export async function resolveProvider(
       configure,
     );
     if (choice === configure) {
-      vscode.commands.executeCommand("CommentASAP.configureApiKey");
+      // FIX: was "CommentASAP.configureApiKey" (wrong casing) — caused "command not found"
+      vscode.commands.executeCommand("commentasap.configureApiKey");
     }
     return null;
   }

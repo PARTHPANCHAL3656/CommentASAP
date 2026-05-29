@@ -1,13 +1,15 @@
 {
   "name": "commentasap",
   "displayName": "CommentASAP – AI Code Documenter",
-  "description": "One-click AI-powered documentation generator and comment remover for JS/TS/Python/Java/C++. Uses your own API key.",
-  "version": "0.1.0",
+  "description": "One-click AI-powered documentation generator and comment remover for JS/TS/Python/Java/C++. Uses your own API key — no data sent to CommentASAP servers.",
+  "version": "0.1.2",
   "publisher": "PARTHPANCHAL3656",
   "engines": { "vscode": "^1.85.0" },
   "categories": ["Other", "Programming Languages"],
-  "keywords": ["documentation", "comments", "AI", "GPT", "Claude", "Gemini", "auto-docs"],
-  "activationEvents": [],
+  "keywords": ["documentation", "comments", "AI", "GPT", "Claude", "Gemini", "auto-docs", "jsdoc", "docstring"],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
   "main": "./out/extension.js",
   "icon": "assets/icon.png",
   "repository": {
@@ -82,7 +84,7 @@
           "enumDescriptions": [
             "OpenAI (GPT-4o)",
             "Anthropic (Claude Sonnet)",
-            "Google (Gemini Pro)",
+            "Google (Gemini 2.5 Flash)",
             "OpenRouter (free & paid models)"
           ],
           "description": "AI provider to use for documentation generation"
@@ -90,8 +92,8 @@
         "commentasap.model": {
           "type": "string",
           "default": "",
-          "description": "Model to use. Leave blank for default. Examples: gpt-4o, gpt-4o-mini, claude-sonnet-4-20250514, gemini-1.5-pro-latest, meta-llama/llama-3.3-70b-instruct:free, nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
-          "markdownDescription": "Model to use for the selected provider. Leave blank to use the default.\n\n**OpenAI:** `gpt-4o`, `gpt-4o-mini`, `gpt-3.5-turbo`\n\n**Anthropic:** `claude-sonnet-4-20250514`, `claude-haiku-4-5-20251001`\n\n**Gemini:** `gemini-1.5-pro-latest`, `gemini-1.5-flash-latest`\n\n**OpenRouter (free):** `meta-llama/llama-3.3-70b-instruct:free`, `nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free`, `mistralai/mistral-7b-instruct:free`"
+          "description": "Model override. Leave blank for default.",
+          "markdownDescription": "Model to use for the selected provider. Leave blank to use the default.\n\n**OpenAI:** `gpt-4o`, `gpt-4o-mini`\n\n**Anthropic:** `claude-haiku-4-5-20251001`, `claude-sonnet-4-20250514`\n\n**Gemini:** `gemini-2.5-flash-preview-05-20`\n\n**OpenRouter (free):** `meta-llama/llama-3.3-70b-instruct:free`, `mistralai/mistral-7b-instruct:free`"
         },
         "commentasap.commentStyle": {
           "type": "string",
