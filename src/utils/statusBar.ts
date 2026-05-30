@@ -8,15 +8,21 @@ export class StatusBarManager implements vscode.Disposable {
       vscode.StatusBarAlignment.Left,
       100
     );
-    this.item.command = 'commentasap.selectProvider';
+    // NOTE: command is set AFTER registration in extension.ts via setReady()
+    // Do NOT set it here — the command doesn't exist yet when the item is created
     this.updateIdle();
     this.item.show();
   }
 
+  /** Call this after all commands are registered in extension.ts activate() */
+  setReady(): void {
+    this.item.command = 'commentasap.selectProvider';
+    this.item.tooltip = 'Click to switch AI provider';
+  }
+
   updateIdle(): void {
     this.item.text = '$(book) commentasap';
-    this.item.tooltip = 'Click to switch AI provider';
-    this.item.backgroundColor = undefined;
+    this.item.tooltip = 'CommentASAP — loading...';
   }
 
   updateWorking(message: string): void {
