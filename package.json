@@ -2,7 +2,7 @@
   "name": "commentasap",
   "displayName": "CommentASAP – AI Code Documenter",
   "description": "One-click AI-powered documentation generator and comment remover for JS/TS/Python/Java/C++. Uses your own API key — no data sent to CommentASAP servers.",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "publisher": "PARTHPANCHAL3656",
   "engines": { "vscode": "^1.85.0" },
   "categories": ["Other", "Programming Languages"],
